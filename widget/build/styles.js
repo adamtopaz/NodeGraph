@@ -1,0 +1,1 @@
+window;const e={container:{display:"flex",flexDirection:"column",alignItems:"center",width:"100%"}};export{e as styles};

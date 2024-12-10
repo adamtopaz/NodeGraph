@@ -1,0 +1,36 @@
+{
+  "name": "autoblueprint",
+  "version": "0.1.0",
+  "description": "",
+  "scripts": {
+    "watch": "rollup --environment NODE_ENV:production --config --watch",
+    "watch-dev": "rollup --config --watch",
+    "build": "npx tsc && rollup --environment NODE_ENV:production --config",
+    "build-dev": "npx tsc && rollup --config",
+    "clean": "rm -r dist/"
+  },
+  "author": "",
+  "license": "Apache-2.0",
+  "type": "module",
+  "dependencies": {
+    "@leanprover/infoview": "~0.7.6",
+    "d3": "^7.9.0",
+    "d3-graphviz": "^5.4.0",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0"
+  },
+  "devDependencies": {
+    "@rollup/plugin-commonjs": "^28.0.1",
+    "@rollup/plugin-node-resolve": "^15.0.2",
+    "@rollup/plugin-replace": "^6.0.1",
+    "@rollup/plugin-terser": "^0.4.0",
+    "@types/d3": "^7.4.3",
+    "@types/d3-graphviz": "^2.6.10",
+    "@types/react": "^18.0.33",
+    "@types/react-dom": "^18.0.11",
+    "glob": "^11.0.0",
+    "rollup": "^4.17.2",
+    "tslib": "^2.5.0",
+    "typescript": "^5.0.3"
+  }
+}
