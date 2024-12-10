@@ -63,15 +63,15 @@ def foo : Nat := 0
 ```
 The above will include the node into the groups `defs` and `zeros`.
 
-Subnodes are terms or tactics that can be tagged as such with the `subnode in term` syntax: 
+Subnodes correspond to terms or tactics that can be tagged as such with the `subnode string in term` or `subnode string in tactic` syntax (the string is optional in both cases): 
 ```lean
 @[node "This is foo" in defs ones]
 def foo : Nat := subnode in 0 + subnode "one" in 1 
 
 @[node "This is bar"]
 def bar : True := by
-  subterm "Should be easy?"
-  subterm "Okay, it was easy" in trivial
+  subnode "Should be easy?"
+  subnode "Okay, it was easy" in trivial
 ```
 
 The `#decl_graph` command will show the full declaration graph which includes *all* declarations tagged with `node`.
