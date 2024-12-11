@@ -1,4 +1,4 @@
-import { useEffect, useRef } from "react";
+import { useEffect, useState, useRef } from "react";
 import * as d3 from 'd3';
 import { graphviz } from 'd3-graphviz';
 import { styles } from './styles';
@@ -11,16 +11,32 @@ export interface ClickableGraphProps {
 
 export default function ClickableGraph({dot, clickHandler, defaultHandler} : ClickableGraphProps) {
   const graphRef = useRef<HTMLDivElement>(null);
+  const [containerSize, setContainerSize] = useState({ width: 0, height: 0 });
+
+  useEffect(() => {
+    if (!graphRef.current) return;
+    
+    const resizeObserver = new ResizeObserver(entries => {
+      for (const entry of entries) {
+        const { width, height } = entry.contentRect;
+        setContainerSize({ width, height });
+      }
+    });
+    
+    resizeObserver.observe(graphRef.current);
+    return () => resizeObserver.disconnect();
+  }, []);
+
   
   useEffect(() => {
     if (!graphRef.current) { return }
     //const containerWidth = graphRef.current.clientWidth;
     //const containerHeight = graphRef.current.clientHeight;
     graphviz(graphRef.current)
-      //.width(containerWidth)
-      //.height(containerHeight)
-      //.fit(true)
-      //.scale(1)
+      .width(containerSize.width)
+      .height(containerSize.height)
+      .fit(true)
+      .scale(1)
       .renderDot(dot)
       .onerror((e) => {
         d3.select(graphRef.current).text(e);
@@ -32,8 +48,8 @@ export default function ClickableGraph({dot, clickHandler, defaultHandler} : Cli
         svg
           .attr('width', '100%')
           .attr('height', '100%')
-          .attr('preserveAspectRatio', 'xMidYMid meet');
-          //.attr('preserveAspectRatio', 'xMidYMid meet');
+          .attr('preserveAspectRatio', 'xMidYMid meet')
+          .attr('viewBox', `0 0 ${containerSize.width} ${containerSize.height}`);
 
         d3.select(graphRef.current).select('polygon').style("fill", "transparent");
 
@@ -66,9 +82,12 @@ export default function ClickableGraph({dot, clickHandler, defaultHandler} : Cli
 
         d3.select(graphRef.current).on("click", function () { defaultHandler() });
       });
-  }, [dot, clickHandler, defaultHandler]);
+  }, [dot, clickHandler, defaultHandler, containerSize]);
 
   return (
-    <div ref={graphRef} />
+    <div 
+      ref={graphRef}
+      style={{ width: '100%', height: '100%' }}
+    />
   );
 }
