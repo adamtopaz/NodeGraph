@@ -12,6 +12,17 @@ export interface ClickableGraphProps {
 export default function ClickableGraph({dot, clickHandler, defaultHandler} : ClickableGraphProps) {
   const graphRef = useRef<HTMLDivElement>(null);
 
+  const [width, setWidth] = useState(0);
+  const [height, setHeight] = useState(0);
+
+  const resizeObserver = new ResizeObserver((entries) => {
+    for (let entry of entries) {
+      const { width, height } = entry.contentRect;
+      setWidth(width);
+      setHeight(height);
+    }
+  });
+
   useEffect(() => {
     if (!graphRef.current) { return }
     //resizeObserver.disconnect();
@@ -66,6 +77,17 @@ export default function ClickableGraph({dot, clickHandler, defaultHandler} : Cli
         d3.select(graphRef.current).on("click", function () { defaultHandler() });
       });
   }, [dot, clickHandler, defaultHandler]);
+
+  useEffect(() => {
+    if (!graphRef.current) { return }
+    resizeObserver.observe(graphRef.current);
+  }, []);
+
+  useEffect(() => {
+    if (!graphRef.current) { return }
+    const svg = d3.select(graphRef.current).select('svg');
+    svg.attr('width', width).attr('height', height);
+  }, [width, height]);
 
   return (
     <div 
