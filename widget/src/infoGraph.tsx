@@ -19,6 +19,8 @@ export default function DeclGraph ({nodes, dot, defaultHtml} : InfoGraphProps) {
 
   const nodeMap = new Map(nodes.map(node => [node.id, node.html]))
   const [infoState, setInfoState] = useState<Html>(defaultHtml);
+  const [graphHeight, setGraphHeight] = useState<number>(0);
+  const [graphWidth, setGraphWidth] = useState<number>(0);
 
   const clickHandler = (id: string) : void => {
     const html = nodeMap.get(id);
@@ -31,12 +33,27 @@ export default function DeclGraph ({nodes, dot, defaultHtml} : InfoGraphProps) {
     setInfoState(defaultHtml);
   }
 
+  const graphRef = useRef<HTMLDivElement>(null);
+  const resizeObserver = new ResizeObserver((entries) => {
+    if (!graphRef.current) { return }
+    const entry = entries[0];
+    setGraphHeight(entry.contentRect.height);
+    setGraphWidth(entry.contentRect.width);
+  });
+
+  useEffect(() => {
+    if (!graphRef.current) { return }
+    resizeObserver.observe(graphRef.current);
+  }, [graphRef]);
+
   return (
     <div style={styles.container}> 
       <ResizableContainer title={"Declaration Graph"}>
-        <div style={{padding : "16px"}}> 
+        <div style={{padding : "16px"}} ref={graphRef}> 
           <ClickableGraph 
             dot={dot} 
+            height={graphHeight}
+            width={graphWidth}
             clickHandler={clickHandler} 
             defaultHandler={defaultHandler} 
           />

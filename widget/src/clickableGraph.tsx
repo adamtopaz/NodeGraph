@@ -1,27 +1,17 @@
 import { useEffect, useState, useRef } from "react";
 import * as d3 from 'd3';
 import { graphviz } from 'd3-graphviz';
-import { styles } from './styles';
 
 export interface ClickableGraphProps {
   dot : string
+  height : number
+  width : number
   clickHandler : (id : string) => void
   defaultHandler : () => void
 }
 
-export default function ClickableGraph({dot, clickHandler, defaultHandler} : ClickableGraphProps) {
+export default function ClickableGraph({dot, height, width, clickHandler, defaultHandler} : ClickableGraphProps) {
   const graphRef = useRef<HTMLDivElement>(null);
-
-  const [width, setWidth] = useState(0);
-  const [height, setHeight] = useState(0);
-
-  const resizeObserver = new ResizeObserver((entries) => {
-    for (let entry of entries) {
-      const { width, height } = entry.contentRect;
-      setWidth(width);
-      setHeight(height);
-    }
-  });
 
   useEffect(() => {
     if (!graphRef.current) { return }
@@ -77,11 +67,6 @@ export default function ClickableGraph({dot, clickHandler, defaultHandler} : Cli
         d3.select(graphRef.current).on("click", function () { defaultHandler() });
       });
   }, [dot, clickHandler, defaultHandler]);
-
-  useEffect(() => {
-    if (!graphRef.current) { return }
-    resizeObserver.observe(graphRef.current);
-  }, []);
 
   useEffect(() => {
     if (!graphRef.current) { return }
