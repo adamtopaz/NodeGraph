@@ -11,7 +11,10 @@ export interface ClickableGraphProps {
 
 export default function ClickableGraph({dot, clickHandler, defaultHandler} : ClickableGraphProps) {
   const graphRef = useRef<HTMLDivElement>(null);
-  const [containerSize, setContainerSize] = useState({ width: 0, height: 0 });
+  const containerWidth = graphRef.current?.clientWidth || 0;
+  const containerHeight = graphRef.current?.clientHeight || 0;
+  const [containerSize, setContainerSize] = 
+    useState({ width: containerWidth, height: containerHeight });
 
   useEffect(() => {
     if (!graphRef.current) return;
@@ -30,8 +33,6 @@ export default function ClickableGraph({dot, clickHandler, defaultHandler} : Cli
   
   useEffect(() => {
     if (!graphRef.current) { return }
-    //const containerWidth = graphRef.current.clientWidth;
-    //const containerHeight = graphRef.current.clientHeight;
     graphviz(graphRef.current)
       .width(containerSize.width)
       .height(containerSize.height)
