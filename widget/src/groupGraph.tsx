@@ -45,6 +45,8 @@ export default function GroupGraph ({graphs, nodes, dot, defaultHtml} : GroupGra
           <div style={{padding : "16px"}}>
             <ClickableGraph 
               dot={graph} 
+              width={100}
+              height={100}
               clickHandler={childClickHandler} 
               defaultHandler={childDefaultHandler} 
             />
@@ -61,7 +63,12 @@ export default function GroupGraph ({graphs, nodes, dot, defaultHtml} : GroupGra
     <div style={styles.container}> 
       <ResizableContainer title={"Group Graph"}>
         <div style={{padding : "16px"}}> 
-          <ClickableGraph dot={dot} clickHandler={clickHandler} defaultHandler={defaultHandler} />
+          <ClickableGraph 
+            dot={dot} 
+            width={100}
+            height={100}
+            clickHandler={clickHandler} 
+            defaultHandler={defaultHandler} />
         </div>
       </ResizableContainer>
       {childState}

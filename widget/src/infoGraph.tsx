@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useRef, useEffect } from "react";
 import HtmlDisplay, { Html } from './htmlDisplay';
 import ClickableGraph from './clickableGraph';
 import { styles } from './styles';
@@ -34,8 +34,14 @@ export default function DeclGraph ({nodes, dot, defaultHtml} : InfoGraphProps) {
   return (
     <div style={styles.container}> 
       <ResizableContainer title={"Declaration Graph"}>
-        <div  style={{padding : "16px"}}>
-          <ClickableGraph dot={dot} clickHandler={clickHandler} defaultHandler={defaultHandler} />
+        <div style={{padding : "16px"}}>
+          <ClickableGraph 
+            dot={dot} 
+            width={100} 
+            height={100} 
+            clickHandler={clickHandler} 
+            defaultHandler={defaultHandler} 
+          />
         </div>
       </ResizableContainer>
       <ResizableContainer title={"Declaration Information"}>

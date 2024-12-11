@@ -1,9 +1,9 @@
 import AutoBlueprint
 
-@[node]
+@[node in a]
 def foo : Nat := 0
 
-@[node]
+@[node in b]
 def bar : Nat := 0
 
-#decl_graph
+#group_graph

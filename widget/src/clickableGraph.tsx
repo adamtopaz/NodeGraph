@@ -5,29 +5,21 @@ import { styles } from './styles';
 
 export interface ClickableGraphProps {
   dot : string
+  width : number
+  height : number
   clickHandler : (id : string) => void
   defaultHandler : () => void
 }
 
-export default function ClickableGraph({dot, clickHandler, defaultHandler} : ClickableGraphProps) {
+export default function ClickableGraph({dot, width, height, clickHandler, defaultHandler} : ClickableGraphProps) {
   const graphRef = useRef<HTMLDivElement>(null);
-  const [containerSize, setContainerSize] = 
-    useState({ width: 0, height: 0 });
-
-  const resizeObserver = new ResizeObserver(entries => {
-    for (const entry of entries) {
-      const { width, height } = entry.contentRect;
-      setContainerSize({ width, height });
-    }
-  });
 
   useEffect(() => {
     if (!graphRef.current) { return }
-    resizeObserver.observe(graphRef.current);
     //resizeObserver.disconnect();
     graphviz(graphRef.current)
-      .width(containerSize.width)
-      .height(containerSize.height)
+      .width(width)
+      .height(height)
       .fit(true)
       .scale(1)
       .renderDot(dot)
@@ -41,7 +33,7 @@ export default function ClickableGraph({dot, clickHandler, defaultHandler} : Cli
         svg
           .attr('width', '100%')
           .attr('height', '100%')
-          .attr('viewBox', `0 0 ${containerSize.width} ${containerSize.height}`)
+          .attr('viewBox', `0 0 ${width} ${height}`)
           .attr('preserveAspectRatio', 'xMidYMid meet');
 
         d3.select(graphRef.current).select('polygon').style("fill", "transparent");
@@ -75,7 +67,7 @@ export default function ClickableGraph({dot, clickHandler, defaultHandler} : Cli
 
         d3.select(graphRef.current).on("click", function () { defaultHandler() });
       });
-  }, [dot, clickHandler, defaultHandler, containerSize]);
+  }, [dot, width, height, clickHandler, defaultHandler]);
 
   return (
     <div 
