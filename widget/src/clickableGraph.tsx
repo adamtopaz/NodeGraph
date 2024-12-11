@@ -25,7 +25,7 @@ export default function ClickableGraph({dot, clickHandler, defaultHandler} : Cli
     if (!graphRef.current) return;
     resizeObserver.observe(graphRef.current);
     return () => resizeObserver.disconnect();
-  }, [containerSize]);
+  }, []);
 
   useEffect(() => {
     if (!graphRef.current) { return }
