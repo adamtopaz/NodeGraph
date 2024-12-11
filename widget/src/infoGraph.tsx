@@ -39,17 +39,18 @@ export default function DeclGraph ({nodes, dot, defaultHtml} : InfoGraphProps) {
     const entry = entries[0];
     setGraphHeight(entry.contentRect.height);
     setGraphWidth(entry.contentRect.width);
+    console.log(entry.contentRect.height, entry.contentRect.width);
   });
 
   useEffect(() => {
     if (!graphRef.current) { return }
     resizeObserver.observe(graphRef.current);
-  }, [graphRef]);
+  }, []);
 
   return (
     <div style={styles.container}> 
-      <ResizableContainer title={"Declaration Graph"}>
-        <div style={{padding : "16px"}} ref={graphRef}> 
+      <ResizableContainer title={"Declaration Graph"} >
+        <div style={{padding : "16px", width : "100%", height : "100%"}} ref={graphRef} > 
           <ClickableGraph 
             dot={dot} 
             height={graphHeight}
