@@ -39,6 +39,8 @@ def serialize (G : GroupGraph) : Array Data := Id.run do
     for item in graph.serialize do out := out.push <| .data g item
   for (d,gs) in G.groups do for g in gs do
     out := out.push <| .group d g
+  for (a,b) in G.deps do
+    out := out.push <| .dep a b
   return out
 
 def deserialize (data : Array Data) : GroupGraph := Id.run do
