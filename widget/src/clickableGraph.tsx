@@ -20,15 +20,11 @@ export default function ClickableGraph({dot, clickHandler, defaultHandler} : Cli
       setContainerSize({ width, height });
     }
   });
- 
-  useEffect(() => {
-    if (!graphRef.current) return;
-    resizeObserver.observe(graphRef.current);
-    return () => resizeObserver.disconnect();
-  }, []);
 
   useEffect(() => {
     if (!graphRef.current) { return }
+    resizeObserver.observe(graphRef.current);
+    //resizeObserver.disconnect();
     graphviz(graphRef.current)
       .width(containerSize.width)
       .height(containerSize.height)
@@ -45,8 +41,8 @@ export default function ClickableGraph({dot, clickHandler, defaultHandler} : Cli
         svg
           .attr('width', '100%')
           .attr('height', '100%')
-          .attr('preserveAspectRatio', 'xMidYMid meet')
-          .attr('viewBox', `0 0 ${containerSize.width} ${containerSize.height}`);
+          .attr('viewBox', `0 0 ${containerSize.width} ${containerSize.height}`)
+          .attr('preserveAspectRatio', 'xMidYMid meet');
 
         d3.select(graphRef.current).select('polygon').style("fill", "transparent");
 
