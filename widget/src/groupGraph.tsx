@@ -42,11 +42,13 @@ export default function GroupGraph ({graphs, nodes, dot, defaultHtml} : GroupGra
     if (graph) {
       setChildState(
         <ResizableContainer title={"Declaration Graph"}>
-          <ClickableGraph 
-            dot={graph} 
-            clickHandler={childClickHandler} 
-            defaultHandler={childDefaultHandler} 
-          />
+          <div style={{padding : "16px"}}>
+            <ClickableGraph 
+              dot={graph} 
+              clickHandler={childClickHandler} 
+              defaultHandler={childDefaultHandler} 
+            />
+          </div>
         </ResizableContainer>);
     }
   }
@@ -58,7 +60,9 @@ export default function GroupGraph ({graphs, nodes, dot, defaultHtml} : GroupGra
   return (
     <div style={styles.container}> 
       <ResizableContainer title={"Group Graph"}>
-        <ClickableGraph dot={dot} clickHandler={clickHandler} defaultHandler={defaultHandler} />
+        <div style={{padding : "16px"}}> 
+          <ClickableGraph dot={dot} clickHandler={clickHandler} defaultHandler={defaultHandler} />
+        </div>
       </ResizableContainer>
       {childState}
       <ResizableContainer title={"Declaration Information"}>
