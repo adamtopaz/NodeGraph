@@ -4,14 +4,21 @@ import { graphviz } from 'd3-graphviz';
 
 export interface ClickableGraphProps {
   dot : string
-  height : number
-  width : number
   clickHandler : (id : string) => void
   defaultHandler : () => void
 }
 
-export default function ClickableGraph({dot, height, width, clickHandler, defaultHandler} : ClickableGraphProps) {
+export default function ClickableGraph({dot, clickHandler, defaultHandler} : ClickableGraphProps) {
   const graphRef = useRef<HTMLDivElement>(null);
+  const [height, setHeight] = useState<number>(0);
+  const [width, setWidth] = useState<number>(0);
+
+  const resizeObserver = new ResizeObserver((entries) => {
+    if (!graphRef.current) { return }
+    const entry = entries[0];
+    setHeight(entry.contentRect.height);
+    setWidth(entry.contentRect.width);
+  });
 
   useEffect(() => {
     if (!graphRef.current) { return }
@@ -73,6 +80,11 @@ export default function ClickableGraph({dot, height, width, clickHandler, defaul
     const svg = d3.select(graphRef.current).select('svg');
     svg.attr('width', width).attr('height', height);
   }, [width, height]);
+
+  useEffect(() => {
+    if (!graphRef.current) { return }
+    resizeObserver.observe(graphRef.current);
+  }, []);  
 
   return (
     <div 
