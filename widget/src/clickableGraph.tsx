@@ -16,16 +16,21 @@ export default function ClickableGraph({dot, clickHandler, defaultHandler} : Cli
   const resizeObserver = new ResizeObserver((entries) => {
     if (!graphRef.current) { return }
     const entry = entries[0];
-    setHeight(entry.contentRect.height);
+    setHeight(entry.contentRect.height - 24); // TODO: this `-24` is a hack.
     setWidth(entry.contentRect.width);
   });
 
   useEffect(() => {
     if (!graphRef.current) { return }
+    resizeObserver.observe(graphRef.current);
+  }, []);  
+
+  useEffect(() => {
+    if (!graphRef.current) { return }
     //resizeObserver.disconnect();
     graphviz(graphRef.current)
-      //.width(width)
-      //.height(height)
+      .width(width)
+      .height(height)
       .fit(true)
       .scale(1)
       .renderDot(dot)
@@ -37,8 +42,8 @@ export default function ClickableGraph({dot, clickHandler, defaultHandler} : Cli
         const svg = d3.select(graphRef.current).select('svg');
 
         svg
-          .attr('width', "100%")
-          .attr('height', "100%")
+          //.attr('width', "100%")
+          //.attr('height', "100%")
           .attr('viewBox', `0 0 ${window.screen.width} ${window.screen.height}`)
           .attr('preserveAspectRatio', 'xMidYMid meet');
 
@@ -80,11 +85,6 @@ export default function ClickableGraph({dot, clickHandler, defaultHandler} : Cli
     const svg = d3.select(graphRef.current).select('svg');
     svg.attr('width', width).attr('height', height);
   }, [width, height]);
-
-  useEffect(() => {
-    if (!graphRef.current) { return }
-    resizeObserver.observe(graphRef.current);
-  }, []);  
 
   return (
     <div 
