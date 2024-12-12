@@ -5,7 +5,6 @@ Modified and copied files:
 - `widget/package.json`: Dependencies, dev dependencies and name were changed
 - `widget/rollup.config.js`: Build directory changed
 - `widget/tsconfig.json`: Copied without modification
-- `widget/src/htmlDisplay.tsx`: Copied without modification
 
 Original source: https://github.com/leanprover-community/ProofWidgets4
 
