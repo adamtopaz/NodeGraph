@@ -20,7 +20,7 @@ interface Styles {
 const styles: Styles = {
   wrapper: {
     width: '100%',
-    maxWidth: '1152px',
+    maxWidth: '90vw',
     marginLeft: 'auto',
     marginRight: 'auto',
     //marginTop: '16px',
