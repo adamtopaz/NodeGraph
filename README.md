@@ -13,7 +13,6 @@ the automatically generated graphs.
 
 ```lean
 import AutoBlueprint
-import Mathlib.Data.Real.Basic
 
 def doc : String :=
   s!"Some additional text {"test"}" ++ " something"
@@ -31,13 +30,14 @@ axiom f : Nat
 noncomputable def b : Nat := a + a + sorry + f
 
 @[node in lemmas]
-lemma foo : b = 0 := sorry
+theorem foo : b = 0 := sorry
 
 #decl_graph
 #decl_graph from b
 #decl_graph in defs to b
 #group_graph
 ```
+The above is also the content of `Test.lean` in this repository.
 
 ## Usage
 

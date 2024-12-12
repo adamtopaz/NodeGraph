@@ -1,5 +1,5 @@
 import { useState } from "react";
-import HtmlDisplay, { Html } from './htmlDisplay';
+import { HtmlDisplay, Html } from '@leanprover-community/proofwidgets4';
 import ClickableGraph from './clickableGraph';
 import { InfoGraphNode } from './infoGraph';
 import { styles } from './styles';

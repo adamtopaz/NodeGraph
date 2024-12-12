@@ -1,5 +1,5 @@
-import { useState, useRef, useEffect } from "react";
-import HtmlDisplay, { Html } from './htmlDisplay';
+import { useState } from "react";
+import { HtmlDisplay, Html } from '@leanprover-community/proofwidgets4';
 import ClickableGraph from './clickableGraph';
 import { styles } from './styles';
 import ResizableContainer from "./container";

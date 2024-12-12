@@ -21,7 +21,6 @@ deriving Inhabited, Server.RpcEncodable
 
 end InfoGraph
 
-
 @[widget_module]
 def InfoGraph : Component InfoGraph.Props where
   javascript := include_str ".." / ".." / "widget" / "build" / "infoGraph.js"
