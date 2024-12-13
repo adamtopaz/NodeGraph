@@ -83,7 +83,7 @@ def addNodeToGroups
       for cgroup in cGroups do
         if cgroup != group then outDeps := outDeps.insert (cgroup, group)
   for group in graphsToReduce do
-    outGraphs := outGraphs.insert group (outGraphs.getD group .empty).tred
+    outGraphs := outGraphs.insert group (outGraphs.getD group .empty)
   setEnv <| ext.setState env ⟨outGraphs, outGroups, outDeps⟩
 
 end GroupGraph

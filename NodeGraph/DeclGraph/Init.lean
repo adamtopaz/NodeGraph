@@ -33,7 +33,7 @@ def addNode (declName : Name) : CoreM Unit := do
   for c in usedCs do
     if G.nodes.contains c then
       out := out.addEdge c declName
-  setEnv <| ext.setState env out.tred
+  setEnv <| ext.setState env out
 
 end DeclGraph
 

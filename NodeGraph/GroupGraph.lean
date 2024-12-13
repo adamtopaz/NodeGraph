@@ -9,6 +9,7 @@ namespace NodeGraph
 def GroupName.mkNode (groupName : GroupName) : CoreM Widget.GroupGraph.Node := do
   let some graph := GroupGraph.ext.getState (← getEnv) |>.graphs |>.get? groupName
     | throwError "{groupName} not found in group registry"
+  let graph : DeclGraph := graph.tred
   return ⟨s!"{hash groupName}", ← graph.mkDot⟩
 
 namespace GroupGraph
