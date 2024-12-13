@@ -69,7 +69,12 @@ export default function GroupGraph ({graphs, nodes, dot, defaultHtml} : GroupGra
       </ResizableContainer>
       {childState}
       <ResizableContainer title={"Declaration Information"}>
-        <div style={{padding : "16px", width : "100%", height : "100%"}}> 
+        <div style={{
+          padding : "16px", 
+          width : "100%", 
+          height : "100%",
+          overflowY: "auto"  
+        }}> 
           <HtmlDisplay html={infoState} />
         </div>
       </ResizableContainer>
