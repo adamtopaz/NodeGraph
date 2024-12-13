@@ -1,10 +1,10 @@
-import AutoBlueprint.NodeAttr.Init
-import AutoBlueprint.Widget.InfoGraph
-import AutoBlueprint.Widget.Utils
+import NodeGraph.NodeAttr.Init
+import NodeGraph.Widget.InfoGraph
+import NodeGraph.Widget.Utils
 
 open Lean Elab ProofWidgets Jsx
 
-namespace AutoBlueprint
+namespace NodeGraph
 
 def DeclName.mkNode (declName : DeclName) : CoreM Widget.InfoGraph.Node := do
   let md? := NodeAttr.attr.getParam? (← getEnv) declName |>.join
@@ -46,4 +46,4 @@ def displayHtml (graph : DeclGraph) (stx : Syntax) : CoreM Unit := do
   Widget.displayHtml (← mkHtml graph) stx
 
 end DeclGraph
-end AutoBlueprint
+end NodeGraph

@@ -1,10 +1,10 @@
-import AutoBlueprint.Widget.Utils
+import NodeGraph.Widget.Utils
 import Lean
 import ProofWidgets
 
 open Lean Elab
 
-namespace AutoBlueprint
+namespace NodeGraph
 
 inductive SubnodeKind where
   | tactic | term
@@ -94,4 +94,4 @@ def elabTacSubnode : Tactic := fun stx => match stx with
   | _ => throwUnsupportedSyntax
 
 end Subnode
-end AutoBlueprint
+end NodeGraph

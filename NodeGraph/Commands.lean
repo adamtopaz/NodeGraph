@@ -1,8 +1,8 @@
-import AutoBlueprint.NodeAttr
-import AutoBlueprint.GroupGraph
+import NodeGraph.NodeAttr
+import NodeGraph.GroupGraph
 
 open Lean Elab
-namespace AutoBlueprint
+namespace NodeGraph
 
 syntax (name := graphCmdStx) "#decl_graph" ("in" ident)? ("from" <|> "to" ident)? : command
 
@@ -55,4 +55,4 @@ def elabGroupGraphCmd : CommandElab := fun stx => match stx with
     liftCoreM <| groupGraph.displayHtml stx
   | _ => throwUnsupportedSyntax
 
-end AutoBlueprint
+end NodeGraph

@@ -2,7 +2,7 @@ import Lean
 
 open Lean
 
-namespace AutoBlueprint
+namespace NodeGraph
 
 namespace CollectDeps
 

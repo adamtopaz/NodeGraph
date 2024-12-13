@@ -1,4 +1,4 @@
-import AutoBlueprint
+import NodeGraph
 
 def doc : String :=
   s!"Some additional text {"test"}" ++ " something"

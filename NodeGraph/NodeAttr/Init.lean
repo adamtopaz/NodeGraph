@@ -1,12 +1,12 @@
-import AutoBlueprint.GroupGraph.Init
-import AutoBlueprint.Subnode.Init
-import AutoBlueprint.Widget.Utils
+import NodeGraph.GroupGraph.Init
+import NodeGraph.Subnode.Init
+import NodeGraph.Widget.Utils
 import ProofWidgets
 
 open Lean Elab
 open ProofWidgets Jsx
 
-namespace AutoBlueprint
+namespace NodeGraph
 
 def DeclName.mkHtml (declName : DeclName) (markdown? : Option String) : CoreM Html := Meta.MetaM.run' do
   let env ← getEnv
@@ -77,4 +77,4 @@ initialize attr : ParametricAttribute (Option String) ← registerParametricAttr
 
 end NodeAttr
 
-end AutoBlueprint
+end NodeGraph

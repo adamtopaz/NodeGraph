@@ -2,7 +2,7 @@ import Lean
 
 open Lean
 
-namespace AutoBlueprint
+namespace NodeGraph
 
 structure Graph (α : Type) [Hashable α] [BEq α] where
   nodes : Std.HashSet α

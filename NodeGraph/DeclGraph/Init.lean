@@ -1,9 +1,9 @@
-import AutoBlueprint.Graph.Basic
-import AutoBlueprint.Utils.CollectDeps
+import NodeGraph.Graph.Basic
+import NodeGraph.Utils.CollectDeps
 
 open Lean
 
-namespace AutoBlueprint
+namespace NodeGraph
 
 abbrev DeclName := Name
 abbrev DeclGraph := Graph DeclName
@@ -37,4 +37,4 @@ def addNode (declName : Name) : CoreM Unit := do
 
 end DeclGraph
 
-end AutoBlueprint
+end NodeGraph

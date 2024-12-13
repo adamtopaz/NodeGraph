@@ -1,7 +1,7 @@
 import Lake
 open Lake DSL
 
-package «AutoBlueprint» where
+package «NodeGraph» where
   -- Settings applied to both builds and interactive editing
   leanOptions := #[
     ⟨`pp.unicode.fun, true⟩, -- pretty-prints `fun a ↦ b`
@@ -12,5 +12,5 @@ package «AutoBlueprint» where
 require "leanprover-community" / "proofwidgets" @ git "v0.0.48"
 
 @[default_target]
-lean_lib «AutoBlueprint» where
+lean_lib «NodeGraph» where
   -- add any library configuration options here

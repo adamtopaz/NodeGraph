@@ -1,26 +1,28 @@
 import ProofWidgets.Component.Basic
 import ProofWidgets.Component.HtmlDisplay
+import NodeGraph.Widget.InfoGraph
 import Lean
 
 open ProofWidgets Jsx Lean
 
-namespace AutoBlueprint
+namespace NodeGraph
 namespace Widget
-namespace InfoGraph
+namespace GroupGraph
 
 structure Node where
   id : String
-  html : Html
+  dot : String
 deriving Inhabited, Server.RpcEncodable
 
 structure Props where
-  nodes : Array Node
+  graphs : Array Node
+  nodes : Array InfoGraph.Node
   dot : String
   defaultHtml : Html
 deriving Inhabited, Server.RpcEncodable
 
-end InfoGraph
+end GroupGraph
 
 @[widget_module]
-def InfoGraph : Component InfoGraph.Props where
-  javascript := include_str ".." / ".." / "widget" / "build" / "infoGraph.js"
+def GroupGraph : Component GroupGraph.Props where
+  javascript := include_str ".." / ".." / "widget" / "build" / "groupGraph.js"

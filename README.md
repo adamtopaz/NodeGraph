@@ -1,4 +1,4 @@
-# AutoBlueprint
+# NodeGraph
 
 A toolset for viewing and automatically creating dependency graphs 
 within the Lean4 infoview. 
@@ -12,7 +12,7 @@ Then put your cursor on one of the various commands at the bottom to see
 the automatically generated graphs.
 
 ```lean
-import AutoBlueprint
+import NodeGraph
 
 def doc : String :=
   s!"Some additional text {"test"}" ++ " something"

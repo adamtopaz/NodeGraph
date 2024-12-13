@@ -1,10 +1,10 @@
-import AutoBlueprint.DeclGraph
-import AutoBlueprint.Widget.GroupGraph
-import AutoBlueprint.Widget.Utils
+import NodeGraph.DeclGraph
+import NodeGraph.Widget.GroupGraph
+import NodeGraph.Widget.Utils
 
 open Lean Elab ProofWidgets Jsx
 
-namespace AutoBlueprint
+namespace NodeGraph
 
 def GroupName.mkNode (groupName : GroupName) : CoreM Widget.GroupGraph.Node := do
   let some graph := GroupGraph.ext.getState (← getEnv) |>.graphs |>.get? groupName
@@ -43,4 +43,4 @@ def displayHtml (graph : GroupGraph) (stx : Syntax) : CoreM Unit := do
   Widget.displayHtml (← mkHtml graph) stx
 
 end GroupGraph
-end AutoBlueprint
+end NodeGraph

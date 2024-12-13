@@ -1,6 +1,6 @@
 import ProofWidgets
 
-namespace AutoBlueprint
+namespace NodeGraph
 namespace Widget
 
 open Lean ProofWidgets in

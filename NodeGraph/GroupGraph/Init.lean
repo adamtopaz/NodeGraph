@@ -1,9 +1,9 @@
-import AutoBlueprint.DeclGraph.Init
-import AutoBlueprint.Utils.CollectDeps
+import NodeGraph.DeclGraph.Init
+import NodeGraph.Utils.CollectDeps
 
 open Lean
 
-namespace AutoBlueprint
+namespace NodeGraph
 
 abbrev GroupName := Name
 
@@ -88,4 +88,4 @@ def addNodeToGroups
 
 end GroupGraph
 
-end AutoBlueprint
+end NodeGraph
