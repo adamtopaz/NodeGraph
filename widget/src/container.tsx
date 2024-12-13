@@ -51,7 +51,11 @@ const styles: Styles = {
     whiteSpace: 'nowrap'
   },
   content: {
-    height: '100%'
+    position: 'absolute',
+    top: '24px', // header height
+    left: 0,
+    right: 0,
+    bottom: 0
   },
   resizeHandle: {
     position: 'absolute',

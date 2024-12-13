@@ -1,4 +1,4 @@
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import * as d3 from 'd3';
 import { graphviz } from 'd3-graphviz';
 
@@ -10,42 +10,33 @@ export interface ClickableGraphProps {
 
 export default function ClickableGraph({dot, clickHandler, defaultHandler} : ClickableGraphProps) {
   const graphRef = useRef<HTMLDivElement>(null);
-  const [height, setHeight] = useState<number>(0);
-  const [width, setWidth] = useState<number>(0);
+  const [height, setHeight] = useState(0);
+  const [width, setWidth] = useState(0);
 
   const resizeObserver = new ResizeObserver((entries) => {
-    if (!graphRef.current) { return }
     const entry = entries[0];
-    setHeight(entry.contentRect.height); 
-    setWidth(entry.contentRect.width);
+    const container = entry.target;
+    setWidth(container.clientWidth);
+    setHeight(container.clientHeight);
   });
 
   useEffect(() => {
     if (!graphRef.current) { return }
     resizeObserver.observe(graphRef.current);
-  }, []);  
+  });
 
   useEffect(() => {
     if (!graphRef.current) { return }
-    //resizeObserver.disconnect();
-    graphviz(graphRef.current)
-      //.width(width)
-      //.height(height)
+    const container = graphRef.current;
+    graphviz(container)
+      .width(container.clientWidth)
+      .height(container.clientHeight)
       .fit(true)
-      .scale(1)
       .renderDot(dot)
       .onerror((e) => {
         d3.select(graphRef.current).text(e);
       })
       .on('end', () => {
-
-        const svg = d3.select(graphRef.current).select('svg');
-
-        svg
-          .attr('width', "100%")
-          .attr('height', "100%")
-          .attr('viewBox', `0 0 ${window.screen.width} ${window.screen.height}`)
-          .attr('preserveAspectRatio', 'xMidYMid meet');
 
         d3.select(graphRef.current).select('polygon').style("fill", "transparent");
 
@@ -83,7 +74,7 @@ export default function ClickableGraph({dot, clickHandler, defaultHandler} : Cli
   useEffect(() => {
     if (!graphRef.current) { return }
     const svg = d3.select(graphRef.current).select('svg');
-    svg.attr('width', width).attr('height', height);
+    svg.attr('width', width).attr('height',height);
   }, [width, height]);
 
   return (
