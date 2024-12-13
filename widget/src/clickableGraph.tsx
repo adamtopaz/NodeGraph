@@ -16,7 +16,7 @@ export default function ClickableGraph({dot, clickHandler, defaultHandler} : Cli
   const resizeObserver = new ResizeObserver((entries) => {
     if (!graphRef.current) { return }
     const entry = entries[0];
-    setHeight(entry.contentRect.height - 24); // TODO: this `-24` is a hack.
+    setHeight(entry.contentRect.height); 
     setWidth(entry.contentRect.width);
   });
 

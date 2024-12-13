@@ -34,7 +34,7 @@ export default function DeclGraph ({nodes, dot, defaultHtml} : InfoGraphProps) {
   return (
     <div style={styles.container}> 
       <ResizableContainer title={"Declaration Graph"} >
-        <div style={{padding : "16px", width : "100%", height : "100%"}} > 
+        <div style={{width : "100%", height : "100%"}} > 
           <ClickableGraph 
             dot={dot} 
             clickHandler={clickHandler} 
