@@ -29,8 +29,8 @@ export default function ClickableGraph({dot, clickHandler, defaultHandler} : Cli
     if (!graphRef.current) { return }
     //resizeObserver.disconnect();
     graphviz(graphRef.current)
-      .width(width)
-      .height(height)
+      //.width(width)
+      //.height(height)
       .fit(true)
       .scale(1)
       .renderDot(dot)
@@ -42,8 +42,8 @@ export default function ClickableGraph({dot, clickHandler, defaultHandler} : Cli
         const svg = d3.select(graphRef.current).select('svg');
 
         svg
-          //.attr('width', "100%")
-          //.attr('height', "100%")
+          .attr('width', "100%")
+          .attr('height', "100%")
           .attr('viewBox', `0 0 ${window.screen.width} ${window.screen.height}`)
           .attr('preserveAspectRatio', 'xMidYMid meet');
 
