@@ -9,7 +9,7 @@ package «NodeGraph» where
   ]
   -- add any additional package configuration options here
 
-require "leanprover-community" / "proofwidgets" @ git "v0.0.48"
+require "leanprover-community" / "proofwidgets" @ git "v0.0.50"
 
 @[default_target]
 lean_lib «NodeGraph» where
