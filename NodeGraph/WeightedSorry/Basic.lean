@@ -14,7 +14,7 @@ macro:max "wsorry" t:term:max : term =>
   `((sorry : Weight → _) $t) 
 
 unsafe
-def getWeightComponent (e : Expr) : MetaM Nat := do
+def extractWeight (e : Expr) : MetaM Nat := do
   let (nm, args) := e.getAppFnArgs
   unless nm == ``sorryAx do return 0
   if h : args.size = 4 then 
@@ -29,19 +29,28 @@ def getWeightComponent (e : Expr) : MetaM Nat := do
     return 0
 
 unsafe
-def collectWeight (e : Expr) : MetaM Nat := Prod.snd <$> go.run 0
+def collectExprWeight (e : Expr) : MetaM Nat := Prod.snd <$> go.run 0
 where go : StateT Nat MetaM Unit := Meta.forEachExpr e fun e => do
-  let w ← getWeightComponent e
+  let w ← extractWeight e
   modify (· + w)
+
+unsafe
+def collectConstWeight (e : ConstantInfo) : MetaM Nat := do
+  let tpWeight ← collectExprWeight e.type
+  let valWeight ← match e.value? with
+  | some val => collectExprWeight val
+  | none => return 0
+  return tpWeight + valWeight
 
 def foo : Nat := 
   let a := wsorry 37 
   let b := wsorry 14 
   wsorry 213 + a + b
 
-#eval show MetaM Unit from do
+def bar : Nat × wsorry 10 := (wsorry 20, wsorry 30)
+
+#eval show MetaM Unit from do -- this gives 70, because the type of `wsorry 30` appears implicitly in the value.
   let env ← getEnv
-  let some c := env.find? `NodeGraph.foo | unreachable!
-  let some val := c.value? | unreachable!
-  let w ← collectWeight val
+  let some const := env.find? `NodeGraph.bar | unreachable!
+  let w ← collectConstWeight const
   println! w
