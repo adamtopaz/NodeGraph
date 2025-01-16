@@ -27,10 +27,10 @@ def a : Nat :=
 axiom f : Nat
 
 @[node in defs]
-noncomputable def b : Nat := a + a + sorry + f
+noncomputable def b : Nat × wsorry 5 := (a + wsorry 10 + f, wsorry 20)
 
 @[node in lemmas]
-theorem foo : b = 0 := sorry
+theorem foo : b = (0, wsorry 73) := sorry
 
 #decl_graph
 #decl_graph from b
@@ -82,3 +82,8 @@ To restrict the graph associated to a group further, it's possible to also write
 
 The `#group_graph` command will display the graph of the various groups and the dependencies between them.
 Clicking on a node in the group graph will show the graph associated to that group.
+
+# Weighted Sorries
+
+It is now possible to use `wsorry 37` to add a "weighted sorry" (with weight 37 in this case).
+The total weight of a given declaration is displayed in the information associated to any given node, and with `(w = 37)` in the declaration graph itself.
