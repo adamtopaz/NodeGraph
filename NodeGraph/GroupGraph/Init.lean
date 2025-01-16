@@ -61,6 +61,7 @@ initialize ext :
   exportEntriesFn := serialize
 }
 
+unsafe
 def addNodeToGroups
     (declName : DeclName) (groups : Std.HashSet GroupName) : CoreM Unit := do
   let usedCs ← collectDeps declName
@@ -72,14 +73,14 @@ def addNodeToGroups
     outGroups :=
       outGroups.insert declName <| outGroups.getD declName .empty |>.insert group
     outGraphs :=
-      outGraphs.insert group <| Graph.addNode (outGraphs.getD group .empty) declName
+      outGraphs.insert group <| ← DeclGraph.addNode (outGraphs.getD group .empty) declName
     for c in usedCs do
       unless outGroups.contains c do continue
       let cGroups := outGroups.getD c .empty
       if cGroups.contains group then
         graphsToReduce := graphsToReduce.insert group
         outGraphs := outGraphs.insert group <|
-          Graph.addEdge (outGraphs.getD group .empty) c declName
+          DeclGraph.addEdge (outGraphs.getD group .empty) c declName
       for cgroup in cGroups do
         if cgroup != group then outDeps := outDeps.insert (cgroup, group)
   for group in graphsToReduce do

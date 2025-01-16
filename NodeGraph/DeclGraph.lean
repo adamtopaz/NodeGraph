@@ -15,7 +15,7 @@ namespace DeclGraph
 def mkDot (graph : DeclGraph) : CoreM String := do
   let env ← getEnv
   let mut out := "digraph {\n"
-  for node in graph.nodes do
+  for node in graph.graph.nodes do
     let some const := env.find? node | continue
     let shape : String ← Meta.MetaM.run' do
       if ← Meta.isProp const.type then return "oval"
@@ -28,12 +28,12 @@ def mkDot (graph : DeclGraph) : CoreM String := do
     let id : String := s!"{hash node}"
     let label : String := s!"{node}"
     out := out ++ s!"  \"{label}\" [id=\"{id}\", label=\"{label}\", color=\"{color}\", shape=\"{shape}\", style=\"{style}\"];\n"
-  for (src,tgt) in graph.edges do
+  for (src,tgt) in graph.graph.edges do
     out := out ++ s!"  \"{src}\" -> \"{tgt}\";\n"
   return out ++ "}"
 
 def mkNodes (graph : DeclGraph) : CoreM (Array Widget.InfoGraph.Node) := do
-  graph.nodes.toArray.mapM DeclName.mkNode
+  graph.graph.nodes.toArray.mapM DeclName.mkNode
 
 def mkHtml (graph : DeclGraph) : CoreM Html :=
   return <Widget.InfoGraph

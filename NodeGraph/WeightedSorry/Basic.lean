@@ -41,17 +41,18 @@ where go : StateT (Std.HashSet WSorry) MetaM Unit := Meta.forEachExpr e fun e =>
   if let some val ← getWSorry e then modify fun S => S.insert val
 
 unsafe
-def collectWSorriesInConst (e : ConstantInfo) : MetaM (Std.HashSet WSorry) := do
+def collectWSorriesInConst (e : ConstantInfo) : CoreM (Std.HashSet WSorry) := Meta.MetaM.run' do
   let tpWeight ← collectWSorriesInExpr e.type
   let valWeight : Std.HashSet (Expr × Nat) ← match e.value? with
   | some val => collectWSorriesInExpr val
   | none => pure .empty
   return tpWeight.union valWeight
 
+/-- Returns the weight and whether the constant *does not* use a weighted sorry -/
 unsafe
-def collectConstWeight (e : ConstantInfo) : MetaM Nat := do
+def collectConstWeight (e : ConstantInfo) : CoreM (Nat × Bool) := do
   let wsorries ← collectWSorriesInConst e
   let mut out := 0
   for ⟨⟨a⟩, _, _⟩ in wsorries do
     out := out + a
-  return out
+  return (out, wsorries.isEmpty)

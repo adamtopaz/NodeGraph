@@ -59,6 +59,7 @@ namespace NodeAttr
 
 syntax (name := nodeAttrStx) "node" (term)? ("in" (ident)*)? : attr
 
+unsafe
 initialize attr : ParametricAttribute (Option String) ← registerParametricAttribute {
   name := `nodeAttrStx
   descr := "A parametric node attribute that stores some necessary information about declarations"
@@ -68,7 +69,10 @@ initialize attr : ParametricAttribute (Option String) ← registerParametricAttr
       Meta.evalExpr String (.const ``String []) (← Term.elabTerm t (some <| .const ``String []))
     let html ← DeclName.mkHtml nm markdown?
     Widget.displayHtml html tk
-    DeclGraph.addNode nm
+    let env ← getEnv
+    let mut G := DeclGraph.ext.getState env
+    G ← G.addNodeAndEdges nm
+    setEnv <| DeclGraph.ext.setState env G
     if let some ids := ids then
       GroupGraph.addNodeToGroups nm <| .ofArray (ids.map fun a => a.getId)
     return markdown?
