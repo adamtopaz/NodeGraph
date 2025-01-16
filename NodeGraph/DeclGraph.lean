@@ -6,9 +6,9 @@ open Lean Elab ProofWidgets Jsx
 
 namespace NodeGraph
 
-def DeclName.mkNode (declName : DeclName) : CoreM Widget.InfoGraph.Node := do
+def DeclName.mkNode (declName : DeclName) (weight? : Option Nat) : CoreM Widget.InfoGraph.Node := do
   let md? := NodeAttr.attr.getParam? (← getEnv) declName |>.join
-  return ⟨s!"{hash declName}", ← declName.mkHtml md?⟩ -- TODO: Fix `none`.
+  return ⟨s!"{hash declName}", ← declName.mkHtml md? weight?⟩ -- TODO: Fix `none`.
 
 namespace DeclGraph
 
@@ -33,7 +33,7 @@ def mkDot (graph : DeclGraph) : CoreM String := do
   return out ++ "}"
 
 def mkNodes (graph : DeclGraph) : CoreM (Array Widget.InfoGraph.Node) := do
-  graph.graph.nodes.toArray.mapM DeclName.mkNode
+  graph.graph.nodes.toArray.mapM fun n => n.mkNode <| graph.weights.get? n
 
 def mkHtml (graph : DeclGraph) : CoreM Html :=
   return <Widget.InfoGraph

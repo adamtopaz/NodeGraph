@@ -8,7 +8,8 @@ open ProofWidgets Jsx
 
 namespace NodeGraph
 
-def DeclName.mkHtml (declName : DeclName) (markdown? : Option String) : CoreM Html := Meta.MetaM.run' do
+def DeclName.mkHtml (declName : DeclName) (markdown? : Option String) (weight? : Option Nat) :
+    CoreM Html := Meta.MetaM.run' do
   let env ← getEnv
   let some const := env.find? declName | return <div/>
   let us ← Meta.mkFreshLevelMVarsFor const
@@ -43,10 +44,15 @@ def DeclName.mkHtml (declName : DeclName) (markdown? : Option String) : CoreM Ht
     match ← findDocString? env declName with
     | some doc => <MarkdownDisplay contents = {doc} />
     | none => <div/>
+  let weightHtml : Html :=
+    match weight? with
+    | some w => <MarkdownDisplay contents = {s!"**Weight:** {w}"} />
+    | none => <div/>
   return (
     <div>
       {mdHtml}
       {docHtml}
+      {weightHtml}
       <p><b><u>Constant Name</u></b></p>
       <InteractiveCode fmt={constFmt} />
       <p><b><u>Constant Type</u></b></p>
@@ -67,7 +73,9 @@ initialize attr : ParametricAttribute (Option String) ← registerParametricAttr
   | `(attr| node%$tk $[$t:term]? $[in $[$ids:ident]*]?) => do
     let markdown? : Option String ← t.mapM fun t => Meta.MetaM.run' <| Term.TermElabM.run' <| unsafe do
       Meta.evalExpr String (.const ``String []) (← Term.elabTerm t (some <| .const ``String []))
-    let html ← DeclName.mkHtml nm markdown?
+    let ⟨w,b⟩ ← collectConstWeight (← getConstInfo nm)
+    let w : Option Nat := if !b then some w else none
+    let html ← DeclName.mkHtml nm markdown? w
     Widget.displayHtml html tk
     let env ← getEnv
     let mut G := DeclGraph.ext.getState env
