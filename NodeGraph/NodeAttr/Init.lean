@@ -46,7 +46,11 @@ def DeclName.mkHtml (declName : DeclName) (markdown? : Option String) (weight? :
     | none => <div/>
   let weightHtml : Html :=
     match weight? with
-    | some w => <MarkdownDisplay contents = {s!"**Weight:** {w}"} />
+    | some w =>
+      <div>
+      <p><b><u>Weight</u></b></p>
+      <p>{.text s!"{w}"}</p>
+      </div>
     | none => <div/>
   return (
     <div>

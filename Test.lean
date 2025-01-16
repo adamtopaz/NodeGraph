@@ -16,7 +16,7 @@ axiom f : Nat
 noncomputable def b : Nat × wsorry 5 := (a + wsorry 10 + f, wsorry 20)
 
 @[node in lemmas]
-theorem foo : b = (0, wsorry 30) := sorry
+theorem foo : b = (0, wsorry 73) := sorry
 
 #decl_graph
 #decl_graph from b

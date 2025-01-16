@@ -27,7 +27,10 @@ def mkDot (graph : DeclGraph) : CoreM String := do
     let style : String := if const matches .axiomInfo .. then "dashed" else "solid"
     let id : String := s!"{hash node}"
     let label : String := s!"{node}"
-    out := out ++ s!"  \"{label}\" [id=\"{id}\", label=\"{label}\", color=\"{color}\", shape=\"{shape}\", style=\"{style}\"];\n"
+    let wlabel : String := match graph.weights.get? node with
+    | some w => s!"{node} (w = {w})"
+    | none => s!"{node}"
+    out := out ++ s!"  \"{label}\" [id=\"{id}\", label=\"{wlabel}\", color=\"{color}\", shape=\"{shape}\", style=\"{style}\"];\n"
   for (src,tgt) in graph.graph.edges do
     out := out ++ s!"  \"{src}\" -> \"{tgt}\";\n"
   return out ++ "}"
