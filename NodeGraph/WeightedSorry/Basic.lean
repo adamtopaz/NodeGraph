@@ -6,7 +6,13 @@ namespace NodeGraph
 
 structure Weight where
   val : Nat
-deriving ToExpr
+deriving ToExpr, BEq, Hashable
+
+structure WSorry where
+  weight : Weight
+  type : Expr
+  name : Name
+deriving BEq, Hashable
 
 instance Weight.instOfNat (n : Nat) : OfNat Weight n where ofNat := .mk n
 
@@ -14,43 +20,38 @@ macro:max "wsorry" t:term:max : term =>
   `((sorry : Weight → _) $t) 
 
 unsafe
-def extractWeight (e : Expr) : MetaM Nat := do
+def getWSorry (e : Expr) : MetaM (Option WSorry) := do
   let (nm, args) := e.getAppFnArgs
-  unless nm == ``sorryAx do return 0
+  unless nm == ``sorryAx do return none
   if h : args.size = 4 then 
     let shouldBeName := args[2]
     let shouldBeWeight := args[3]
-    unless (← Meta.inferType shouldBeName) == .const `Lean.Name [] do return 0
-    unless (← Meta.inferType shouldBeWeight) == .const `NodeGraph.Weight [] do return 0
+    unless (← Meta.inferType shouldBeName) == .const `Lean.Name [] do return none
+    unless (← Meta.inferType shouldBeWeight) == .const `NodeGraph.Weight [] do return none
+    let name ← Meta.evalExpr Name (.const `Lean.Name []) args[2]
     let weight := Expr.app (.const `NodeGraph.Weight.val []) args[3]
     let weight ← Meta.evalExpr Nat (.const `Nat []) weight
-    return weight
+    return some ⟨⟨weight⟩, args[0], name⟩
   else 
-    return 0
+    return none
 
 unsafe
-def collectExprWeight (e : Expr) : MetaM Nat := Prod.snd <$> go.run 0
-where go : StateT Nat MetaM Unit := Meta.forEachExpr e fun e => do
-  let w ← extractWeight e
-  modify (· + w)
+def collectWSorriesInExpr (e : Expr) : MetaM (Std.HashSet WSorry) := Prod.snd <$> go.run {}
+where go : StateT (Std.HashSet WSorry) MetaM Unit := Meta.forEachExpr e fun e => do
+  if let some val ← getWSorry e then modify fun S => S.insert val
+
+unsafe
+def collectWSorriesInConst (e : ConstantInfo) : MetaM (Std.HashSet WSorry) := do
+  let tpWeight ← collectWSorriesInExpr e.type
+  let valWeight : Std.HashSet (Expr × Nat) ← match e.value? with
+  | some val => collectWSorriesInExpr val
+  | none => pure .empty
+  return tpWeight.union valWeight
 
 unsafe
 def collectConstWeight (e : ConstantInfo) : MetaM Nat := do
-  let tpWeight ← collectExprWeight e.type
-  let valWeight ← match e.value? with
-  | some val => collectExprWeight val
-  | none => return 0
-  return tpWeight + valWeight
-
-def foo : Nat := 
-  let a := wsorry 37 
-  let b := wsorry 14 
-  wsorry 213 + a + b
-
-def bar : Nat × wsorry 10 := (wsorry 20, wsorry 30)
-
-#eval show MetaM Unit from do -- this gives 70, because the type of `wsorry 30` appears implicitly in the value.
-  let env ← getEnv
-  let some const := env.find? `NodeGraph.bar | unreachable!
-  let w ← collectConstWeight const
-  println! w
+  let wsorries ← collectWSorriesInConst e
+  let mut out := 0
+  for ⟨⟨a⟩, _, _⟩ in wsorries do
+    out := out + a
+  return out
