@@ -19,7 +19,7 @@ deriving Inhabited
 
 namespace DeclGraph
 
-def empty : DeclGraph := ⟨Graph.empty, Std.HashMap.empty⟩
+def empty : DeclGraph := ⟨Graph.empty, Std.HashMap.emptyWithCapacity⟩
 
 def addData (G : DeclGraph) (d : Data) : DeclGraph := 
   match d with
@@ -43,7 +43,7 @@ def deserialize (ds : Array Data) : DeclGraph := Id.run do
 initialize ext :
     PersistentEnvExtension Data Data DeclGraph ←
     registerPersistentEnvExtension {
-  mkInitial := return ⟨.empty, .empty⟩
+  mkInitial := return ⟨.empty, .emptyWithCapacity⟩
   addImportedFn := fun as => do
     let mut bs : Array Data := #[]
     for a in as do

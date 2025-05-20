@@ -28,7 +28,7 @@ def addData (G : GroupGraph) (d : Data) : GroupGraph := Id.run do
   | .data g d =>
     graphs := graphs.insert g <| graphs.getD g .empty |>.addData d
   | .group d g =>
-    groups := groups.insert d <| groups.getD d .empty |>.insert g
+    groups := groups.insert d <| groups.getD d .emptyWithCapacity |>.insert g
   | .dep a b =>
     deps := deps.insert (a,b)
   return ⟨graphs, groups, deps⟩
@@ -71,12 +71,12 @@ def addNodeToGroups
   let mut graphsToReduce : Std.HashSet GroupName := {}
   for group in groups do
     outGroups :=
-      outGroups.insert declName <| outGroups.getD declName .empty |>.insert group
+      outGroups.insert declName <| outGroups.getD declName .emptyWithCapacity |>.insert group
     outGraphs :=
       outGraphs.insert group <| ← DeclGraph.addNode (outGraphs.getD group .empty) declName
     for c in usedCs do
       unless outGroups.contains c do continue
-      let cGroups := outGroups.getD c .empty
+      let cGroups := outGroups.getD c .emptyWithCapacity
       if cGroups.contains group then
         graphsToReduce := graphsToReduce.insert group
         outGraphs := outGraphs.insert group <|

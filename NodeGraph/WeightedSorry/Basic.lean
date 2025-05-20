@@ -45,7 +45,7 @@ def collectWSorriesInConst (e : ConstantInfo) : CoreM (Std.HashSet WSorry) := Me
   let tpWeight ← collectWSorriesInExpr e.type
   let valWeight : Std.HashSet (Expr × Nat) ← match e.value? with
   | some val => collectWSorriesInExpr val
-  | none => pure .empty
+  | none => pure .emptyWithCapacity
   return tpWeight.union valWeight
 
 /-- Returns the weight and whether the constant *does not* use a weighted sorry -/
